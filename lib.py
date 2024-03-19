@@ -1,29 +1,44 @@
 import time
+import random
 
-methods = {'selection', 'merge'}
+methods = {'selection', 'merge', 'tim', 'bubble', 'bogo'}
 # methods = ['selection', 'merge' 'insertion', 'merge', 
 #           'quick', 'heap', 'bubble', 'comb', 'cocktail']
 
 
-def selection(list1):
+def print_time(method, time_taken):
+    if time_taken > 60.0:
+        time_taken = 60.0
+        print('{} - execution time:   > {:.5f} seconds'
+              .format(method.__name__[:3], time_taken))
+    else:
+        print('{} - execution time: {:>12.5f} seconds'
+              .format(method.__name__[:3], time_taken))
+
+
+def selection(lst):
+    if len(lst) > 60000:
+        return 999.0
     start_time = time.time()
-    largest_num = len(list1) + 1  # largest possible num + 1
+    largest_num = len(lst) + 1  # largest possible num + 1
     sorted_list = []
-    while len(list1) > 0:
+    while len(lst) > 0:
         smallest = largest_num
         indx = None
-        for i, num in enumerate(list1):
+        for i, num in enumerate(lst):
             if num < smallest:
                 smallest = num
                 indx = i
         sorted_list.append(smallest)
-        list1.pop(indx)
+        lst.pop(indx)
     time_taken = time.time() - start_time
-    list1 = sorted_list
+    lst = sorted_list
     return time_taken
 
 
-def merge(lst):  # noqa
+def merge(lst):
+    if len(lst) > 15000000:
+        return 999.0
     start_time = time.time()
     merge_sort(lst)
     time_taken = time.time() - start_time
@@ -76,3 +91,54 @@ def merge_sort(lst):
             j += 1
             k += 1
     # print('exiting recursive loop', lst)
+
+
+def tim(lst):  # pythons default
+    if len(lst) > 99999999999999:
+        return 999.0
+    start_time = time.time()
+    sorted(lst)
+    time_taken = time.time() - start_time
+    return time_taken
+
+
+def bubble(lst):
+    if len(lst) > 50000:
+        return 999.0
+
+    start_time = time.time()
+
+    done = False
+    last = len(lst)
+    while not done:
+        switched = False
+        for i in range(last-1):
+            if lst[i] > lst[i+1]:
+                smaller = lst[i+1]
+                lst[i+1] = lst[i]
+                lst[i] = smaller
+                switched = True
+        if not switched:
+            done = True
+        last -= 1  # optimisation: largest int always taken to the end / sorted
+
+    time_taken = time.time() - start_time
+    return time_taken
+
+
+def bogo(lst):
+    if len(lst) > 11:
+        return 999.0
+    start_time = time.time()
+
+    ordered = False
+    while not ordered:
+        random.shuffle(lst)
+        # check if ordered
+        ordered = True
+        for i in range(len(lst)-1):
+            if lst[i] > lst[i+1]:
+                ordered = False
+
+    time_taken = time.time() - start_time
+    return time_taken
