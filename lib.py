@@ -1,9 +1,9 @@
 import time
 import random
 
-methods = {'selection', 'merge', 'tim', 'bubble', 'bogo'}
-# methods = ['selection', 'merge' 'insertion', 'merge', 
-#           'quick', 'heap', 'bubble', 'comb', 'cocktail']
+# TODO heap, counting, radix, bucket, shell, cocktail, comb
+methods = {'selection', 'merge', 'tim', 'bubble', 'bogo',
+           'insertion', 'quick'}
 
 
 def print_time(method, time_taken):
@@ -20,6 +20,7 @@ def selection(lst):
     if len(lst) > 60000:
         return 999.0
     start_time = time.time()
+
     largest_num = len(lst) + 1  # largest possible num + 1
     sorted_list = []
     while len(lst) > 0:
@@ -31,8 +32,8 @@ def selection(lst):
                 indx = i
         sorted_list.append(smallest)
         lst.pop(indx)
+
     time_taken = time.time() - start_time
-    lst = sorted_list
     return time_taken
 
 
@@ -142,3 +143,84 @@ def bogo(lst):
 
     time_taken = time.time() - start_time
     return time_taken
+
+
+def insertion(lst):
+    if len(lst) > 100000:
+        return 999.0
+    start_time = time.time()
+
+    num = 1
+    while num < len(lst):
+        for i in range(0, num):
+            if lst[i] > lst[num]:
+                # print(lst)
+                # print('lst[i] =', lst[i], 'lst[num] =', lst[num])
+                # print('inserting', lst[num], 'at', i)
+                lst.insert(i, lst[num])  # (before) pos = arg1, item = arg2
+                # print(lst)
+                # print('popping', lst[num+1], 'at', num+1)
+                lst.pop(num + 1)
+                break
+        num += 1
+
+    time_taken = time.time() - start_time
+    return time_taken
+
+
+def quick(lst):
+    if len(lst) > 20000000:
+        return 999.0
+    start_time = time.time()
+
+    quick_sort(lst, 0, len(lst))
+
+    time_taken = time.time() - start_time
+    return time_taken
+
+
+def quick_sort(lst, start, end):
+    # print('new call', start, end)
+
+    if start < end - 1:  # min length 2
+        split = partition(lst, start, end)
+        quick_sort(lst, start, split)
+        quick_sort(lst, split + 1, end)  # split+1 as pivot in exact right spot
+
+        # print(lst)
+    # else:
+        # print('ignore')
+
+
+def partition(lst, start, end):
+    pivot = lst[end-1]
+    j = start-1  # high pointer
+    # print(lst[start:end], pivot)
+    for i in range(start, end-1):
+        # print('i =', i, '   j =', j)
+        if lst[i] <= pivot:
+            j += 1
+            lst[i], lst[j] = lst[j], lst[i]
+            # print('swapped pos', i, j)
+    j += 1
+    lst[end-1], lst[j] = lst[j], lst[end-1]  # swap pivot element
+    # print('pivot swap', end-1, j)
+
+    return j
+
+
+def template(lst):
+    if len(lst) > 100000:
+        return 999.0
+    start_time = time.time()
+
+    pass  # method logic here
+
+    time_taken = time.time() - start_time
+    return time_taken
+
+# TODO
+"""
+- write single sentence summary of what each algo does
+- binary search
+"""

@@ -28,5 +28,5 @@ while not complete:
         complete = True
 
     else:
-        print("\nSelect a valid method, these include: {}\n"
+        print("\nSelect a valid method, these include: all, {}\n"
               .format(', '.join(lib.methods)))
